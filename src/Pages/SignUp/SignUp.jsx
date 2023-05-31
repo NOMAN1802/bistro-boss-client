@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from '../../providers/AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import SocialLogin from '../Shared/SocialLogin/SocialLogin';
 
 const SignUp = () => {
 
@@ -12,23 +13,39 @@ const SignUp = () => {
     const { register, handleSubmit,reset, formState: { errors } } = useForm();
     const navigate = useNavigate()
     const onSubmit = data => {
-        console.log(data);
+        
         createUser(data.email, data.password)
         .then(result =>{
            const LoggedUser = result.user;
-           console.log(LoggedUser); 
+          
            updateUserProfile(data.name, data.photoURL)
            .then(()=>{
-                 console.log('User profile info updated');
-                 reset();
-                 Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'User Created SuccessFully',
-                    showConfirmButton: false,
-                    timer: 1500
-                  })
-                  navigate('/');
+                const saveInfo = {name: data.name, email: data.email, photoURL: data.photoURL }
+                fetch('http://localhost:5000/users',{
+                   method: 'POST',
+                   headers: {
+                    'content-type': 'application/json'
+                   },
+                   body: JSON.stringify(saveInfo)
+                })
+                .then(res => res.json())
+                .then(data =>{
+                   if(data.insertedId){
+
+                    reset();
+                    Swal.fire({
+                       position: 'top-end',
+                       icon: 'success',
+                       title: 'User Created SuccessFully',
+                       showConfirmButton: false,
+                       timer: 1500
+                     })
+                     navigate('/');
+
+                   } 
+                })
+                 
+                
            })
            .catch(error => console.log(error))
         })
@@ -100,7 +117,8 @@ const SignUp = () => {
                                     value="Sign Up" />
                             </div>
                         </form>
-                        <p><small>Already have  an account <Link to={'/login'}> Login</Link></small></p>
+                        <p className='text-center'><small>Already have  an account <Link to={'/login'}> Login</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>

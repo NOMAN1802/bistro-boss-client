@@ -30,12 +30,12 @@ const NavBar = () => {
     {
       user ? <>
         <span className='m-auto'>{user?.displayName}</span>
-        <div className="avatar online w-12 mx-2">
+        <div className="avatar online w-12 mx-2 m-auto">
           <div className="w-24 rounded-full">
             <img src={user.photoURL} />
           </div>
         </div>
-        <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button>
+        <button onClick={handleLogOut} className="btn btn-ghost m-auto">LogOut</button>
       </> : <>
         <li><Link to="/login">Login</Link></li>
       </>
