@@ -9,7 +9,7 @@ import useCart from '../../hooks/useCart';
 const FoodCard = ({item}) => {
     const {image, price, recipe, name, _id} = item;
     const {user} = useContext(AuthContext);
-    const [, refetch] = useCart();
+    const [ refetch] = useCart();
     const navigate = useNavigate();
     const location = useLocation();
     const handleAddToCart = item =>{
